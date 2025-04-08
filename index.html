@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport"
+        content="width=640, height=960,
+        initial-scale=1.0, user-scalable=no"/>
+  <title>NutriBalance (640x960)</title>
+  <style>
+    /* 640x960 window! */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 640px;   
+      height: 960px;  
+      overflow: hidden; 
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #002244; 
+    }
+    
+    .app-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 16px;
+    }
+
+    /* styling */
+    .card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Progress bar */
+    .circular-progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .circular-progress {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    /* Grey background circle */
+    .progress-bg {
+      stroke: #e0e0e0;
+    }
+
+    /* progress bar circle */
+    .progress-bar-circle {
+      stroke: #007bff;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s;
+    }
+
+    /* Steps text placeholder */
+    .progress-text {
+      fill: #002244;
+      font-size: 14px;
+      text-anchor: middle;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .progress-bar-container {
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      height: 12px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .progress-bar-fill {
+      background-color: #007bff;
+      height: 100%;
+      width: 0;
+      transition: width 1s;
+    }
+
+    .list-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .list-menu li {
+      background-color: #ffffff;
+      border-bottom: 1px solid #ddd;
+      padding: 12px;
+      cursor: pointer;
+    }
+    .list-menu li:hover {
+      background-color: #f0f0f0;
+    }
+    .list-menu li:last-child {
+      border-bottom: none;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #555;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Steps /  Stats Card -->
+    <div class="card">
+      <div class="card-title">Steps & Activity</div>
+
+
+      <div class="circular-progress-container">
+        <svg class="circular-progress" viewBox="0 0 120 120">
+          <circle
+            class="progress-bg"
+            cx="60" cy="60" r="54"
+            stroke-width="12"
+            fill="none"
+          ></circle>
+          <circle
+            class="progress-bar-circle"
+            cx="60" cy="60" r="54"
+            stroke-width="12"
+            fill="none"
+            stroke-dasharray="339.292"
+            stroke-dashoffset="339.292"
+          ></circle>
+          <text x="60" y="60" class="progress-text">0 / 10000</text>
+        </svg>
+      </div>
+
+      <div class="stats-row">
+        <div>350 calories burned</div>
+        <div>3 hrs walked</div>
+        <div>3200 steps remaining</div>
+      </div>
+    </div>
+
+    <!-- Calories & Macro card -->
+    <div class="card">
+      <div class="card-title">Calories & Macronutrients</div>
+
+      <div style="margin-bottom: 4px;">
+        <strong>1300 / 2000</strong> calories
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="caloriesBar"></div>
+      </div>
+
+      <div class="subtitle">Protein: 12/50 g</div>
+      <div class="subtitle">Carbs: 120/250 g</div>
+      <div class="subtitle">Sugar: 60/80 g</div>
+      <div class="subtitle">Sodium: 1000/2000 mg</div>
+
+      <div style="text-align: right; margin-top: 8px;">
+        <a href="#" style="color: #007bff; text-decoration: none;">Log Meal &raquo;</a>
+      </div>
+    </div>
+
+    <!-- Additional Features Card -->
+    <div class="card">
+      <ul class="list-menu">
+        <li>Edit Exercise</li>
+        <li>Track Water Intake</li>
+        <li>Manage Goals</li>
+        <li>View History</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    /*
+      1) Animate the circular steps progress bar.
+      2) Animate a standard progress bar for calories, etc.
+    */
+    document.addEventListener('DOMContentLoaded', () => {
+      // PLACEHOLDER TEXT!
+      const currentSteps = 6800;
+      const stepGoal = 10000;
+      animateCircularSteps(currentSteps, stepGoal);
+
+      // PLACEHOLDER TEXT!
+      animateBarFill('caloriesBar', 1300, 2000);
+    });
+
+    function animateCircularSteps(current, goal) {
+      const circumference = 339.292; 
+      const circle = document.querySelector('.progress-bar-circle');
+      const text = document.querySelector('.progress-text');
+
+      const pct = Math.min(current / goal, 1);
+      const offset = circumference - (pct * circumference);
+      circle.style.strokeDashoffset = offset.toString();
+
+      // Text updater code  : )
+      text.textContent = `${current} / ${goal}`;
+    }
+
+    function animateBarFill(barId, current, goal) {
+      const barElement = document.getElementById(barId);
+      const pct = Math.min((current / goal) * 100, 100);
+      barElement.style.width = pct + '%';
+    }
+  </script>
+</body>
+</html>
