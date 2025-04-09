@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exercise Logger</title>
+  <meta name="viewport" content="width=640, height=960, initial-scale=1.0, user-scalable=no" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 640px;
+      height: 960px;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #002244;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 16px;
+    }
+
+    .top-nav {
+      background-color: #004080;
+      padding: 12px;
+      text-align: right;
+    }
+
+    .top-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .form-group button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .form-group button:hover {
+      background-color: #0056b3;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 6px;
+      border-bottom: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .action-btn {
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .edit-btn {
+      background-color: #ffc107;
+    }
+
+    .action-btn:hover {
+      opacity: 0.8;
+    }
+    .icon-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 100px; 
+    }
+
+    .icon-container img {
+      max-width: 100%;
+      max-height: 75px; 
+      width: auto; 
+      height: auto; 
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="index.html">Home</a>
+  </div>
+
+  <div class="app-container">
+    <div class="card">
+      <h2 class="card-title">Exercise Logging</h2><br>
+
+      <div class="icon-container">
+        <img src="icons/exercise.png" alt="Exercise" title="Exercise" />
+        <img src="icons/run.png" alt="Running" title="Running" />
+        <img src="icons/weight.png" alt="Weightlifting" title="Weightlifting" />
+      </div>
+
+      <!-- Exercise log form -->
+      <div class="form-group">
+        <label for="exercise-type">Exercise Type:</label>
+        <select id="exercise-type">
+          <option value="Running">Running</option>
+          <option value="Cycling">Cycling</option>
+          <option value="Swimming">Swimming</option>
+          <option value="Weightlifting">Weightlifting</option> 
+        </select>
+      </div>
+
+      <!-- Form fields per exercise type -->
+      <div id="weightlifting-fields" style="display: none;">
+        <div class="form-group">
+          <label for="sets">Sets:</label>
+          <input type="number" id="sets" placeholder="e.g. 3" min="1" />
+        </div>
+        <div class="form-group">
+          <label for="reps">Reps per Set:</label>
+          <input type="number" id="reps" placeholder="e.g. 12" min="1" />
+        </div>
+      </div>
+
+      <div id="duration-intensity-fields" style="display: none;">
+        <div class="form-group">
+          <label for="duration">Duration (minutes):</label>
+          <input type="number" id="duration" placeholder="e.g. 30" min="1" />
+        </div>
+        <div class="form-group">
+          <label for="intensity">Intensity (1-10):</label>
+          <input type="number" id="intensity" placeholder="e.g. 7" min="1" max="10" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button id="log-exercise">Log Exercise</button>
+      </div>
+    </div>
+
+    <!-- Table for logged exercises -->
+    <div class="card">
+      <h2 class="card-title">Logged Exercises</h2>
+      <table id="exercise-table">
+        <thead>
+          <tr>
+            <th>Exercise</th>
+            <th>Sets/Reps</th>
+            <th>Duration</th>
+            <th>Intensity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('exercise-type').addEventListener('change', function() {
+      const selectedExercise = this.value;
+
+      if (selectedExercise === 'Weightlifting') {
+        document.getElementById('weightlifting-fields').style.display = 'block';
+        document.getElementById('duration-intensity-fields').style.display = 'none';
+      } else {
+        document.getElementById('weightlifting-fields').style.display = 'none';
+        document.getElementById('duration-intensity-fields').style.display = 'block';
+      }
+    });
+
+    document.getElementById('log-exercise').addEventListener('click', function() {
+      const exerciseType = document.getElementById('exercise-type').value;
+      let setsReps = 'N/A';
+      let duration = 'N/A';
+      let intensity = 'N/A';
+
+      if (exerciseType === 'Weightlifting') {
+        const sets = document.getElementById('sets').value;
+        const reps = document.getElementById('reps').value;
+        setsReps = `${sets} sets x ${reps} reps`;
+      } else {
+        duration = document.getElementById('duration').value;
+        intensity = document.getElementById('intensity').value;
+      }
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${exerciseType}</td>
+        <td>${setsReps}</td>
+        <td>${duration}</td>
+        <td>${intensity}</td>
+        <td><button class="action-btn edit-btn">Edit</button> &nbsp; <button class="action-btn">Delete</button></td>
+      `;
+
+      document.querySelector('#exercise-table tbody').appendChild(row);
+    });
+  </script>
+</body>
+</html>
