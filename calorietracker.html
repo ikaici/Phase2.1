@@ -305,6 +305,9 @@
       document.addEventListener("DOMContentLoaded", () => {
         updateCalorieProgress();
         loadMealLog();
+
+        const remainingCalories = calorieGoal - currentCalories;
+        alert(`You have ${remainingCalories} kcal left to reach your 2000 kcal goal! `);
       });
     </script>
   </body>
