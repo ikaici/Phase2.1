@@ -51,7 +51,6 @@
       font-weight: bold;
     }
 
-    /* Form styling */
     .form-group {
       margin-bottom: 12px;
     }
@@ -121,10 +120,8 @@
   </div>
 
   <script>
-    // Daily goal
+    // Daily goal, shuld be set via user profile later
     const stepsGoal = 10000;
-
-    // Retrieve stored steps from localStorage or default to 0
     let currentSteps = parseInt(localStorage.getItem('currentSteps') || '0', 10);
 
     const stepsBar = document.getElementById('steps-bar');
@@ -138,7 +135,7 @@
       stepsSummary.textContent = `${currentSteps} / ${stepsGoal}`;
     }
 
-    // Save currentSteps to localStorage
+    // everyone try and use localStorage
     function saveSteps() {
       localStorage.setItem('currentSteps', currentSteps.toString());
     }
@@ -153,8 +150,6 @@
       }
       stepsInput.value = '';
     });
-
-    // Initialize when page loads
     document.addEventListener('DOMContentLoaded', () => {
       updateStepsProgress();
     });
