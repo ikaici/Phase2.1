@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Water Tracker</title>
+  <meta name="viewport" content="width=640, height=960, initial-scale=1.0, user-scalable=no" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 640px;    
+      height: 960px;  
+      overflow: hidden; 
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #002244; 
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 16px;
+    }
+
+    .top-nav {
+      background-color: #004080;
+      padding: 12px;
+      text-align: right;
+    }
+    .top-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .form-group button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .form-group button:hover {
+      background-color: #0056b3;
+    }
+
+    .progress-bar-container {
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      height: 16px;
+      margin: 8px 0;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      background-color: #007bff;
+      height: 100%;
+      width: 0;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="index.html">Home</a>
+  </div>
+
+  <div class="app-container">
+    <div class="card">
+      <h2 class="card-title">Water Intake</h2>
+
+      <!-- Current water vs. goal -->
+      <p><strong id="water-summary">0 / 2000 ml</strong></p>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="water-bar"></div>
+      </div>
+
+      <!-- Form to log water intake -->
+      <div class="form-group">
+        <label for="water-input">Add Water (ml):</label>
+        <input type="number" id="water-input" placeholder="e.g. 250" min="0" />
+      </div>
+      <div class="form-group">
+        <button id="add-water-btn">Log Water</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Water goal, dynamically from profile later
+    const waterGoal = 2000;  // ml
+    let currentWater = parseInt(localStorage.getItem('currentWater') || '0', 10);
+
+    const waterBar = document.getElementById('water-bar');
+    const waterSummary = document.getElementById('water-summary');
+    const waterInput = document.getElementById('water-input');
+    const addWaterBtn = document.getElementById('add-water-btn');
+
+    function updateWaterProgress() {
+      const pct = Math.min((currentWater / waterGoal) * 100, 100);
+      waterBar.style.width = pct + '%';
+      waterSummary.textContent = `${currentWater} / ${waterGoal} ml`;
+    }
+
+    // Save data
+    function saveWater() {
+      localStorage.setItem('currentWater', currentWater.toString());
+    }
+
+    // Add water intake
+    addWaterBtn.addEventListener('click', () => {
+      const waterToAdd = parseInt(waterInput.value, 10);
+      if (!isNaN(waterToAdd) && waterToAdd > 0) {
+        currentWater += waterToAdd;
+        updateWaterProgress();
+        saveWater();
+      }
+      waterInput.value = '';
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateWaterProgress();
+    });
+  </script>
+</body>
+</html>
