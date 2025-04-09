@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macronutrients Tracker</title>
+    <link rel="stylesheet" href="mystyle.css">
+</head>
+<body>
+<div class="nav">
+    <a href="index.html">Home</a>
+</div>
+
+<div class="app-container">
+    <div class="card">
+    <h2 class="card-title">Macronutrients Tracker</h2>
+
+    <div id="nutrients-container"></div>
+
+    <div class="form-group">
+        <label for="nutrient">Select Nutrient to Update:</label>
+        <select id="nutrient">
+        <option value="carbs">Carbs</option>
+        <option value="protein">Protein</option>
+        <option value="fat">Fat</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="intake-input">Add Intake (grams):</label>
+        <input type="number" id="intake-input" min="0" />
+    </div>
+
+    <div class="form-group">
+        <button id="log-intake-btn">Log Intake</button>
+    </div>
+
+    <div class="form-group">
+        <label for="goal-input">Set Goal for Selected Nutrient (grams):</label>
+        <input type="number" id="goal-input" min="0" />
+    </div>
+
+    <div class="form-group">
+        <button id="set-goal-btn">Set Goal</button>
+    </div>
+    </div>
+</div>
+
+<script>
+    const defaultGoals = {
+        carbs: 225,
+        protein: 50,
+        fat: 44
+    };
+
+    const nutrients = ['carbs', 'protein', 'fat'];
+    let goals = JSON.parse(localStorage.getItem('macroGoals')) || defaultGoals;
+
+    let currentIntake = JSON.parse(localStorage.getItem('macroIntake')) || {
+        carbs: 0,
+        protein: 0,
+        fat: 0
+    };
+
+    const container = document.getElementById('nutrients-container');
+    const nutrientSelect = document.getElementById('nutrient');
+    const intakeInput = document.getElementById('intake-input');
+    const goalInput = document.getElementById('goal-input');
+    const logBtn = document.getElementById('log-intake-btn');
+    const goalBtn = document.getElementById('set-goal-btn');
+
+    function saveData() {
+        localStorage.setItem('macroGoals', JSON.stringify(goals));
+        localStorage.setItem('macroIntake', JSON.stringify(currentIntake));
+    }
+
+    function updateUI() {
+        container.innerHTML = '';
+        nutrients.forEach(nutrient => {
+            const pct = Math.min((currentIntake[nutrient] / goals[nutrient]) * 100, 100);
+
+            const card = document.createElement('div');
+            card.className = 'form-group';
+            card.innerHTML = `
+            <label><strong>${nutrient.toUpperCase()}</strong>: ${currentIntake[nutrient]} / ${goals[nutrient]} grams</label>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+            </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    logBtn.addEventListener('click', () => {
+        const nutrient = nutrientSelect.value;
+        const amount = parseInt(intakeInput.value, 10);
+        if (!isNaN(amount) && amount > 0) {
+            currentIntake[nutrient] += amount;
+            saveData();
+            updateUI();
+        }
+        intakeInput.value = '';
+    });
+
+    goalBtn.addEventListener('click', () => {
+        const nutrient = nutrientSelect.value;
+        const goal = parseInt(goalInput.value, 10);
+        if (!isNaN(goal) && goal > 0) {
+            goals[nutrient] = goal;
+            saveData();
+            updateUI();
+        }
+        goalInput.value = '';
+    });
+
+    document.addEventListener('DOMContentLoaded', updateUI);
+</script>
+</body>
+</html>
