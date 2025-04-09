@@ -195,8 +195,10 @@
       let storedSteps = parseInt(localStorage.getItem('currentSteps') || '0', 10);
       animateCircularSteps(storedSteps, 10000);
 
-      // Example: Animate a standard progress bar for daily calories (placeholder).
-      animateBarFill('caloriesBar', 1300, 2000);
+      const storedCalories = parseInt(localStorage.getItem('currentCalories') || '0', 10);
+      const caloriesInfo = document.getElementById('calories-info');
+      caloriesInfo.textContent = `${storedCalories} / 2000 calories`;
+      animateBarFill('caloriesBar', storedCalories, 2000);
 
       // If you want to reflect "steps remaining" dynamically:
       const stepsRemainingElem = document.getElementById('steps-remaining');
@@ -226,9 +228,6 @@
       const pct = Math.min((current / goal) * 100, 100);
       barElement.style.width = pct + '%';
 
-      // calorie stuff maybex
-      const caloriesInfo = document.getElementById('calories-info');
-      caloriesInfo.textContent = `${current} / ${goal}`;
     }
   </script>
 </body>
