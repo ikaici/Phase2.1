@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calorie Tracker</title>
+    <meta
+      name="viewport"
+      content="width=640, height=960, initial-scale=1.0, user-scalable=no"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 640px;
+        height: 960px;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #002244;
+      }
+
+      .app-container {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 16px;
+      }
+
+      .top-nav {
+        background-color: #004080;
+        padding: 12px;
+        text-align: right;
+      }
+
+      .top-nav a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 20px;
+      }
+
+      .card {
+        background-color: #f7f9fc;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .card-title {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: bold;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+
+      .form-group button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .form-group button:hover {
+        background-color: #0056b3;
+      }
+
+      .progress-bar-container {
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        height: 16px;
+        margin: 8px 0;
+        overflow: hidden;
+      }
+
+      .progress-bar-fill {
+        background-color: #007bff;
+        height: 100%;
+        width: 0;
+        transition: width 0.5s;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 6px;
+        border-bottom: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      .action-btn {
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+
+      .edit-btn {
+        background-color: #ffc107;
+      }
+
+      .action-btn:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-nav">
+      <a href="index.html">Home</a>
+    </div>
+
+    <div class="app-container">
+      <div class="card">
+        <h2 class="card-title">Calorie Tracker</h2>
+
+        <!-- Current calories vs. goal -->
+        <p><strong id="calorie-summary">0 / 2000 kcal</strong></p>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="calorie-bar"></div>
+        </div>
+
+        <!-- Form to log origin of calories -->
+        <div class="form-group">
+          <label for="meal-type">Meal Type:</label>
+          <select id="meal-type">
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Snacks">Snacks</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="meal-time">Time:</label>
+          <input type="time" id="meal-time" />
+        </div>
+
+        <!-- Form to log calories -->
+        <div class="form-group">
+          <label for="calorie-input">Add Calories (kcal):</label>
+          <input
+            type="number"
+            id="calorie-input"
+            placeholder="e.g. 500"
+            min="0"
+          />
+        </div>
+
+        <div class="form-group">
+          <button id="add-calorie-btn">Log Calories</button>
+          <button id="reset-calories-btn">Reset Calories</button>
+        </div>
+
+        <!-- Table for logging -->
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Meal</th>
+              <th>Calories</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="meal-log-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const calorieGoal = 2000;
+      let currentCalories = parseInt(
+        localStorage.getItem("currentCalories") || "0",
+        10
+      );
+
+      const calorieBar = document.getElementById("calorie-bar");
+      const calorieSummary = document.getElementById("calorie-summary");
+      const calorieInput = document.getElementById("calorie-input");
+      const mealTypeInput = document.getElementById("meal-type");
+      const mealTimeInput = document.getElementById("meal-time");
+      const addCalorieBtn = document.getElementById("add-calorie-btn");
+      const mealLogBody = document.getElementById("meal-log-body");
+
+      function updateCalorieProgress() {
+        const pct = Math.min((currentCalories / calorieGoal) * 100, 100);
+        calorieBar.style.width = pct + "%";
+        calorieSummary.textContent = `${currentCalories} / ${calorieGoal} kcal`;
+      }
+
+      const resetCaloriesBtn = document.getElementById("reset-calories-btn");
+
+      resetCaloriesBtn.addEventListener("click", () => {
+        currentCalories = 0;
+        updateCalorieProgress();
+        mealLogBody.innerHTML = "";
+        localStorage.setItem("currentCalories", "0");
+      });
+      function saveMealLog() {
+        const mealLogs = [];
+        const rows = mealLogBody.querySelectorAll("tr");
+        rows.forEach((row) => {
+          const time = row.querySelector("td:nth-child(1)").textContent;
+          const meal = row.querySelector("td:nth-child(2)").textContent;
+          const calories = row.querySelector("td:nth-child(3)").textContent;
+          mealLogs.push({ time, meal, calories });
+        });
+        localStorage.setItem("mealLogs", JSON.stringify(mealLogs));
+      }
+
+      function loadMealLog() {
+        const mealLogs = JSON.parse(localStorage.getItem("mealLogs")) || [];
+        mealLogs.forEach((log) => {
+          addToLog(log.time, log.meal, log.calories);
+        });
+      }
+      function addToLog(time, meal, calories) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+    <td>${time}</td>
+    <td>${meal}</td>
+    <td>${calories}</td>
+    <td>
+      <button class="edit-btn action-btn">Edit</button>
+      <button class="delete-btn action-btn">Delete</button>
+    </td>
+  `;
+        mealLogBody.appendChild(row);
+
+        const editBtn = row.querySelector(".edit-btn");
+        const deleteBtn = row.querySelector(".delete-btn");
+
+        editBtn.addEventListener("click", () => {
+          calorieInput.value = calories;
+          mealTypeInput.value = meal;
+          mealTimeInput.value = time;
+          row.remove();
+          currentCalories -= calories;
+          updateCalorieProgress();
+          saveCalories();
+          saveMealLog();
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          row.remove();
+          currentCalories -= calories;
+          updateCalorieProgress();
+          saveCalories();
+          saveMealLog();
+        });
+
+        saveMealLog();
+      }
+
+      function saveCalories() {
+        localStorage.setItem("currentCalories", currentCalories.toString());
+      }
+
+      addCalorieBtn.addEventListener("click", () => {
+        const calsToAdd = parseInt(calorieInput.value, 10);
+        const meal = mealTypeInput.value;
+        const time = mealTimeInput.value;
+
+        if (!isNaN(calsToAdd) && calsToAdd > 0 && time) {
+          currentCalories += calsToAdd;
+          updateCalorieProgress();
+          saveCalories();
+          addToLog(time, meal, calsToAdd);
+        }
+
+        calorieInput.value = "";
+        mealTimeInput.value = "";
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        updateCalorieProgress();
+        loadMealLog();
+      });
+    </script>
+  </body>
+</html>
