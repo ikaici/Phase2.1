@@ -100,3 +100,54 @@ select {
     width: 0;
     transition: width 0.5s;
 }
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 640px; /* fixed width based on tablet viewport */
+    background-color: #004080;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .bottom-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  
+  .bottom-nav a:hover {
+    background-color: #0056b3;
+  }
+  
+  .profile-button {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 1001;
+  }
+  
+  .profile-button img {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    background-color: #ffffff;
+    padding: 2px;
+  }
+  
+  /* Optional: Push down the content slightly so it doesn't clash */
+  .app-container {
+    padding-top: 60px; /* increased from 16px to give room for profile icon */
+  }
+  
