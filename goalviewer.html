@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Goal Details</title>
+  <link rel="stylesheet" href="mystyle.css">
+  <meta name="viewport" content="width=640, height=960, initial-scale=1.0, user-scalable=no" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 640px;
+      height: 960px;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #002244;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 16px;
+    }
+
+    .card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .goal-detail {
+      font-size: 16px;
+      margin: 8px 0;
+    }
+
+    .progress-bar-container {
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      height: 20px;
+      width: 100%;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-bar-fill {
+      background-color: #28a745;
+      height: 100%;
+      width: 0;
+      transition: width 1s;
+    }
+
+    .back-button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="card">
+      <div class="card-title">Goal Details</div>
+      <div class="goal-detail"><strong>Description:</strong> <span id="goal-desc">Loading...</span></div>
+      <div class="goal-detail"><strong>Start Date:</strong> <span id="goal-start">2025-04-01</span></div>
+      <div class="goal-detail"><strong>End Date:</strong> <span id="goal-end">2025-07-01</span></div>
+      <div class="goal-detail"><strong>Progress:</strong> <span id="goal-progress-text">0 lbs lost</span></div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="goalProgressBar"></div>
+      </div>
+
+      <button class="back-button" onclick="window.location.href='goals.html'">Back to Goals</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const goalDesc = localStorage.getItem('selectedGoalDesc') || 'Lose 5 lbs in 2 months';
+      const total = parseInt(localStorage.getItem('selectedGoalTarget') || '5', 10);
+      const progress = parseInt(localStorage.getItem('selectedGoalProgress') || '0', 10);
+
+      const percent = Math.min((progress / total) * 100, 100);
+
+      document.getElementById('goal-desc').textContent = goalDesc;
+      document.getElementById('goal-progress-text').textContent = `${progress} lbs lost`;
+      document.getElementById('goalProgressBar').style.width = percent + '%';
+    });
+  </script>
+
+  <div class="bottom-nav">
+    <a href="index.html">Home</a>
+    <a href="calorietracker.html">Calories</a>
+    <a href="macrostracker.html">Macros</a>
+    <a href="exerciselogging.html">Exercise</a>
+    <a href="stepstracker.html">Steps</a>
+    <a href="waterintake.html">Water</a>
+  </div>
+
+</body>
+</html>

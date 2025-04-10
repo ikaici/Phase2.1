@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Goals Management</title>
+  <link rel="stylesheet" href="mystyle.css">
+  <meta name="viewport" content="width=640, height=960, initial-scale=1.0, user-scalable=no" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 640px;
+      height: 960px;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #002244;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 16px;
+    }
+
+    .card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .form-group button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .form-group button:hover {
+      background-color: #0056b3;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 6px;
+      border-bottom: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .action-btn {
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .edit-btn {
+      background-color: #ffc107;
+    }
+
+    .view-btn {
+      background-color: #28a745;
+    }
+
+    .action-btn:hover {
+      opacity: 0.8;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Goal Creation Form -->
+    <div class="card">
+      <h2 class="card-title">Manage Goals</h2>
+      <div class="form-group">
+        <label for="goal-description">Goal Description:</label>
+        <input type="text" id="goal-description" placeholder="e.g., Lose 5 lbs in 2 months" />
+      </div>
+      <div class="form-group">
+        <button id="add-goal">Add Goal</button>
+      </div>
+    </div>
+
+    <!-- Goals List Table -->
+    <div class="card">
+      <h2 class="card-title">Current Goals</h2>
+      <table id="goals-table">
+        <thead>
+          <tr>
+            <th>Goal Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('add-goal').addEventListener('click', function() {
+      const goalDesc = document.getElementById('goal-description').value;
+      if (!goalDesc) {
+        alert("Please enter a goal description.");
+        return;
+      }
+
+      addGoalToTable(goalDesc);
+      document.getElementById('goal-description').value = '';
+    });
+
+    function addGoalToTable(description) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="goal-text">${description}</td>
+        <td>
+          <button class="action-btn view-btn" onclick="window.location.href='goalviewer.html'" style="cursor: pointer;">View</button>
+          <button class="action-btn edit-btn" onclick="editGoal(this)">Edit</button>
+          <button class="action-btn" onclick="deleteGoal(this)">Delete</button>
+        </td>
+      `;
+
+      document.querySelector('#goals-table tbody').appendChild(row);
+    }
+
+
+
+    function editGoal(button) {
+      const row = button.closest('tr');
+      const currentDesc = row.querySelector('.goal-text').textContent;
+      const newDesc = prompt("Edit your goal:", currentDesc);
+      if (newDesc) {
+        row.querySelector('.goal-text').textContent = newDesc;
+      }
+    }
+
+    function deleteGoal(button) {
+      if (confirm("Are you sure you want to delete this goal?")) {
+        const row = button.closest('tr');
+        row.remove();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      addGoalToTable("Lose 5 lbs in 2 months");
+    });
+  </script>
+
+  <div class="bottom-nav">
+    <a href="index.html">Home</a>
+    <a href="calorietracker.html">Calories</a>
+    <a href="macrostracker.html">Macros</a>
+    <a href="exerciselogging.html">Exercise</a>
+    <a href="stepstracker.html">Steps</a>
+    <a href="waterintake.html">Water</a>
+  </div>
+</body>
+</html>
