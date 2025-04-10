@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Health Tips</title>
+    <link rel="stylesheet" href="mystyle.css" />
+    <meta
+      name="viewport"
+      content="width=640, height=960, initial-scale=1.0, user-scalable=no"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 640px;
+        height: 960px;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #002244;
+      }
+
+      .app-container {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 16px;
+      }
+
+      .top-nav {
+        background-color: #004080;
+        padding: 12px;
+        text-align: right;
+      }
+
+      .top-nav a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 20px;
+      }
+
+      .card {
+        background-color: #f7f9fc;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .card-title {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      ol {
+        padding-left: 20px;
+        font-size: 16px;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      .toggle-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .toggle-btn:hover {
+        background-color: #0056b3;
+      }
+
+      .bottom-nav {
+        background-color: #004080;
+        padding: 12px;
+        text-align: center;
+      }
+
+      .bottom-nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="card">
+        <h1 class="card-title">Tips For a Healthy Lifestyle</h1>
+        <hr />
+        <ol>
+          <li>
+            Strive to consume at least 8 cups (64 ounces) of water per day, or
+            more if you're physically active or in a hot environment.
+          </li>
+          <li>
+            Consume a variety of nutritious foods to support immune function,
+            energy levels, and mental well-being.
+          </li>
+          <li>
+            Practice meditation for at least 10 minutes per day to reduce stress
+            and improve mental well-being.
+          </li>
+          <li>
+            Aim for at least 150 minutes of moderate-intensity aerobic exercise
+            or 75 minutes of vigorous-intensity aerobic exercise per week
+          </li>
+          <li>
+            Take breaks from sitting and incorporate movement into your day to
+            reduce the negative effects of prolonged sitting, such as obesity
+            and poor posture
+          </li>
+        </ol>
+
+        <div class="sources-container">
+          <button class="toggle-btn" onclick="toggleSources()">
+            Show Sources
+          </button>
+          <div
+            class="sources"
+            id="sources"
+            style="display: none; margin-top: 10px"
+          >
+            <p><strong>Sources:</strong></p>
+            <ul style="padding-left: 20px">
+              <li>
+                Centers for Disease Control and Prevention. (2020). Get the
+                facts: Drinking water and intake. Retrieved from
+                https://www.cdc.gov/nutrition/data-statistics/plain-water-the-healthier-choice.html
+              </li>
+              <li>
+                Harvard School of Public Health. (2020). The nutrition source:
+                Healthy eating plate. Retrieved from
+                https://www.hsph.harvard.edu/nutritionsource/healthy-eating-plate/
+              </li>
+              <li>
+                Mayo Clinic. (2021). Meditation: A simple, fast way to reduce
+                stress. Retrieved from
+                https://www.mayoclinic.org/tests-procedures/meditation/in-depth/meditation/art-20045858
+              </li>
+              <li>
+                American Heart Association. (2018). American Heart Association
+                Recommendations for Physical Activity in Adults and Kids.
+                Retrieved from
+                https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults
+              </li>
+              <li>
+                Mayo Clinic. (2020). Sitting risks: How harmful is too much
+                sitting? Retrieved from
+                https://www.mayoclinic.org/healthy-lifestyle/adult-health/expert-answers/sitting/faq-20058005
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <a href="index.html">Home</a>
+      <a href="calorietracker.html">Calories</a>
+      <a href="macrostracker.html">Macros</a>
+      <a href="exerciselogging.html">Exercise</a>
+      <a href="stepstracker.html">Steps</a>
+      <a href="waterintake.html">Water</a>
+    </div>
+
+    <script>
+      function toggleSources() {
+        const sources = document.getElementById("sources");
+        const btn = document.querySelector(".toggle-btn");
+        if (sources.style.display === "none") {
+          sources.style.display = "block";
+          btn.textContent = "Hide Sources";
+        } else {
+          sources.style.display = "none";
+          btn.textContent = "Show Sources";
+        }
+      }
+    </script>
+  </body>
+</html>
