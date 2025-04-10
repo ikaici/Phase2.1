@@ -105,7 +105,7 @@ select {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 640px; /* fixed width based on tablet viewport */
+    width: 640px; 
     background-color: #004080;
     display: flex;
     justify-content: space-around;

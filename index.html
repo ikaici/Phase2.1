@@ -65,7 +65,6 @@
       stroke-linecap: round;
       transition: stroke-dashoffset 1s;
     }
-    /* Steps text placeholder */
     .progress-text {
       fill: #002244;
       font-size: 14px;
@@ -187,7 +186,7 @@
         </svg>
       </div>
       <div class="stats-row">
-        <!-- Someone do this dynamically, thank you :)-->
+        <!-- Someone do this dynamically later :)-->
         <div id="calories-burned">350 calories burned</div>
         <div>3 hrs walked</div>
         <div id="steps-remaining">3200 steps remaining</div>
@@ -216,7 +215,6 @@
     <div class="card">
       <ul class="list-menu">
         <li onclick="window.location.href='exerciselogging.html'" style="cursor: pointer;">Log Exercise</li>
-        <!-- Link for Water Intake -->
         <li onclick="window.location.href='waterintake.html'" style="cursor: pointer;">Track Water Intake</li>
         <li onclick="window.location.href='goals.html'" style="cursor: pointer;">Manage Goals</li>
         <li>View History</li>
@@ -226,14 +224,8 @@
   <br><br>
 
   <script>
-    /*
-      1) Reads the user's step data from localStorage (to update the circular bar).
-      2) Reads or sets placeholder for the calories progress bar.
-    */
+
     document.addEventListener('DOMContentLoaded', () => {
-      // Animate the circular steps progress bar
-      //  - Load currentSteps from localStorage or default to 0
-      //  - stepsGoal is 10,000
       let storedSteps = parseInt(localStorage.getItem('currentSteps') || '0', 10);
       animateCircularSteps(storedSteps, 10000);
 
@@ -241,8 +233,6 @@
       const caloriesInfo = document.getElementById('calories-info');
       caloriesInfo.textContent = `${storedCalories} / 2000 calories`;
       animateBarFill('caloriesBar', storedCalories, 2000);
-
-      // If you want to reflect "steps remaining" dynamically:
       const stepsRemainingElem = document.getElementById('steps-remaining');
       const stepsLeft = 10000 - storedSteps;
       if (stepsLeft > 0) {
@@ -261,7 +251,7 @@
       const offset = circumference - (pct * circumference);
       circle.style.strokeDashoffset = offset.toString();
 
-      // Update text
+      //  DYnamicness
       text.textContent = `${current} / ${goal}`;
     }
 
